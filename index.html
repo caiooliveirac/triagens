@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMU Triagens Inteligente</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md border-b border-slate-200 fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="bg-red-600 text-white p-2 rounded-lg">
+                        <i data-lucide="ambulance" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-900 tracking-tight">SAMU Triagens</h1>
+                        <p class="text-xs text-slate-500 font-medium">Sistema Inteligente de Suporte</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <div class="relative hidden md:block">
+                        <input type="text" id="global-search" placeholder="Pesquisar sintoma (Ex: PCR)..." 
+                            class="bg-slate-100 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-red-500 w-64 transition-all">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+                    </div>
+                    <button class="p-2 text-slate-500 hover:text-red-600 transition-colors">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                    </button>
+                    <div class="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center text-slate-600 font-bold text-sm">
+                        IA
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        
+        <!-- Welcome Section -->
+        <header class="mb-8 fade-in">
+            <h2 class="text-3xl font-bold text-slate-900 mb-2">Painel de Regulação</h2>
+            <p class="text-slate-500">Selecione uma categoria ou pesquise para iniciar a triagem.</p>
+        </header>
+
+        <!-- Category Toggles (Grid) -->
+        <div id="category-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8 fade-in">
+            <!-- Categories injected by JS -->
+        </div>
+
+        <!-- Active Context Area -->
+        <div id="active-context" class="hidden fade-in">
+            <div class="flex items-center justify-between mb-6">
+                <button id="back-to-home" class="flex items-center text-slate-500 hover:text-slate-900 transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
+                    Voltar para Categorias
+                </button>
+                <div id="active-category-badge" class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
+                    Clínico
+                </div>
+            </div>
+
+            <!-- Complaint Selection -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+                <div class="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                    <h3 class="font-semibold text-slate-700 flex items-center gap-2">
+                        <i data-lucide="list" class="w-4 h-4"></i>
+                        Selecione a Queixa Principal
+                    </h3>
+                </div>
+                <div id="complaints-list" class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-60 overflow-y-auto">
+                    <!-- Complaints injected here -->
+                </div>
+            </div>
+
+            <!-- Triage Assessment (The Red/Yellow/Green Cards) -->
+            <div id="triage-section" class="hidden">
+                 <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i data-lucide="activity" class="w-5 h-5 text-red-600"></i>
+                    Protocolo de Avaliação: <span id="current-complaint-title" class="text-red-600">PCR</span>
+                </h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Red Card -->
+                    <div class="bg-white rounded-xl shadow-sm border-l-4 border-red-500 overflow-hidden hover:shadow-md transition-shadow">
+                        <div class="p-4 bg-red-50 border-b border-red-100 flex items-center justify-between">
+                            <h4 class="font-bold text-red-700 flex items-center gap-2">
+                                <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                                Vermelho (Emergência)
+                            </h4>
+                        </div>
+                        <ul id="list-red" class="p-4 space-y-2 text-sm text-slate-700">
+                        </ul>
+                    </div>
+
+                     <!-- Yellow Card -->
+                     <div class="bg-white rounded-xl shadow-sm border-l-4 border-yellow-500 overflow-hidden hover:shadow-md transition-shadow">
+                        <div class="p-4 bg-yellow-50 border-b border-yellow-100 flex items-center justify-between">
+                            <h4 class="font-bold text-yellow-700 flex items-center gap-2">
+                                <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                                Amarelo (Urgência)
+                            </h4>
+                        </div>
+                        <ul id="list-yellow" class="p-4 space-y-2 text-sm text-slate-700">
+                        </ul>
+                    </div>
+
+                     <!-- Green Card -->
+                     <div class="bg-white rounded-xl shadow-sm border-l-4 border-emerald-500 overflow-hidden hover:shadow-md transition-shadow">
+                        <div class="p-4 bg-emerald-50 border-b border-emerald-100 flex items-center justify-between">
+                            <h4 class="font-bold text-emerald-700 flex items-center gap-2">
+                                <i data-lucide="check-circle" class="w-5 h-5"></i>
+                                Verde (Pouca Urgência)
+                            </h4>
+                        </div>
+                        <ul id="list-green" class="p-4 space-y-2 text-sm text-slate-700">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Guidelines / Agent Advice -->
+                <div class="mt-8 bg-slate-800 text-white rounded-xl shadow-lg p-6 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <i data-lucide="bot" class="w-32 h-32"></i>
+                    </div>
+                    <h4 class="text-lg font-bold mb-3 flex items-center gap-2">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-yellow-400"></i>
+                        Orientações do Agente IA
+                    </h4>
+                    <div id="ai-guidelines" class="relative z-10 text-slate-300 space-y-2">
+                        <!-- Red guidelines injected here -->
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="./js/data.js"></script>
+    <script src="./js/app.js"></script>
+    <script>
+        // Initialize Lucide icons after module load (or call luxide.createIcons inside app.js)
+        window.addEventListener('load', () => {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>
