@@ -130,7 +130,7 @@ Números para dimensionar, não para faturar; medir com `usage` real nas primeir
 
 ## 3. O cérebro: system prompt do agente
 
-> **Versão vigente: v2, em [`docs/PROMPT_AGENTE.md`](PROMPT_AGENTE.md)** — resposta compacta, campo "descartar", limites impostos pelo schema e cinco casos de provocação com gabarito. O texto abaixo é a v1, mantido só como histórico.
+> **Versão vigente: v3, em [`docs/PROMPT_AGENTE.md`](PROMPT_AGENTE.md)** — resposta compacta, campo "descartar", camada de calibração do nível (o nível reflete o que está presente; o pior cenário vai para descartar) e cinco casos de provocação com gabarito. O texto abaixo é a v1, mantido só como histórico.
 
 O prompt é o produto. Versão inicial (pt-BR, guardada em `api/src/prompt.ts` e versionada):
 
